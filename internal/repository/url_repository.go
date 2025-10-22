@@ -38,11 +38,11 @@ func (repository *urlRepository) Create(url string) (types.CreateShortenUrlRespo
 }
 
 func (repository *urlRepository) FindUrlBySlug(slug string) (model.Url, error) {
-	urlModel := model.Url{
-		ShortURL: slug,
-	}
+	var urlModel model.Url
 
-	if err := repository.db.Find(&urlModel).Error; err != nil {
+	if err := repository.db.First(&urlModel).Where(&model.Url{
+		ShortURL: slug,
+	}).Error; err != nil {
 		return model.Url{}, err
 	}
 
